@@ -2,7 +2,7 @@ use std::str::Chars;
 
 pub fn luhn(cc_number: &str) -> bool {
     let mut arr: Vec<u32> = vec![];
-    for x in cc_number.chars().rev() {
+    for x in cc_number.chars() {
         if x.is_whitespace() {
             continue;
         }
@@ -17,29 +17,19 @@ pub fn luhn(cc_number: &str) -> bool {
     if arr.len() < 2 {
         return false;
     }
-    let mut i = 1;
     let mut sum = 0;
-    for mut x in arr {
-        if i % 2 == 0 {
-            sum += trim_num(x * 2)
+    let parity = arr.len() % 2;
+    for i in 0..arr.len() {
+        if (i + 1) % 2 == parity {
+            sum += arr[i]
+        } else if arr[i] > 4 {
+            sum += arr[i] * 2 - 9
         } else {
-            sum += x;
+            sum += arr[i] * 2;
         }
-        i += 1;
     }
-    return sum % 10 == 0;
-}
 
-fn trim_num(mut i: u32) -> u32 {
-    if i < 10 {
-        return i;
-    }
-    let mut y: u32 = 0;
-    while i > 0 {
-        y += i % 10;
-        i = i / 10;
-    }
-    return trim_num(y);
+    return sum % 10 == 0;
 }
 
 #[test]
