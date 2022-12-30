@@ -3,14 +3,20 @@ use std::str::Chars;
 pub fn luhn(cc_number: &str) -> bool {
     let mut arr: Vec<u32> = vec![];
     for x in cc_number.chars().rev() {
-        if x.is_whitespace() { continue; }
-        if !x.is_numeric() { return false; }
+        if x.is_whitespace() {
+            continue;
+        }
+        if !x.is_numeric() {
+            return false;
+        }
         match x.to_string().parse::<u32>() {
             Ok(i) => arr.push(i),
-            _ => return false
+            _ => return false,
         }
     }
-    if arr.len() < 2 { return false; }
+    if arr.len() < 2 {
+        return false;
+    }
     let mut i = 1;
     let mut sum = 0;
     for mut x in arr {
@@ -21,11 +27,13 @@ pub fn luhn(cc_number: &str) -> bool {
         }
         i += 1;
     }
-    return sum == 0;
+    return sum % 10 == 0;
 }
 
 fn trim_num(mut i: u32) -> u32 {
-    if i < 10 { return i; }
+    if i < 10 {
+        return i;
+    }
     let mut y: u32 = 0;
     while i > 0 {
         y += i % 10;
